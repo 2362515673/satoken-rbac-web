@@ -19,5 +19,9 @@ import { dateZhCN, zhCN } from 'naive-ui'
 .n-config-provider {
   width: 100%;
   height: 100%;
+
+  .n-tree :deep(.n-tree-node-content) {
+    line-height: initial !important;
+  }
 }
 </style>

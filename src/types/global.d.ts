@@ -5,7 +5,8 @@ interface Meta {
   title: string,
   key: string,
   group?: boolean,
-  icon: Component
+  icon: Component,
+  roles: string[]
 }
 
 // 路由 应该可以被替换
@@ -35,4 +36,12 @@ export interface ResultPage<T> {
   total: number       // 总条数
   pages: number       // 总页数
   list: T[]             // 数据
+}
+
+export interface RouterVO {
+  path: string
+  name: string
+  component?: string
+  children?: RouterVO[]
+  meta?: Meta
 }

@@ -13,6 +13,12 @@ export interface SaveRoleDTO {
   status?: number
 }
 
+// 给角色添加菜单
+export interface AddRoleMenuDTO {
+  roleId: string
+  menuIds: string[]
+}
+
 // 编辑角色
 export interface EditRoleDTO {
   id: string

@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { useMenuStore } from '@/stores/menu.ts'
 
+const menuStore = useMenuStore()
 </script>
 
 <template>

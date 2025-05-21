@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useMessage } from 'naive-ui'
-import { getTreeMenuAPI, saveMenuAPI } from '@/apis/menu.ts'
-import type { SaveMenuDTO, TreeMenuVO } from '@/types/menu'
+import { deleteMenuAPI, editMenuAPI, getTreeMenuAPI, saveMenuAPI } from '@/apis/menu.ts'
+import { menuTableColumns } from '@/utils/tableColumns.ts'
+import type { EditMenuDTO, SaveMenuDTO, TreeMenuVO } from '@/types/menu'
 import { AddOutline } from '@vicons/ionicons5'
 import MenusForm from '@/views/Menus/components/MenusForm.vue'
-import { menuTableColumns } from '@/utils/tableColumns.ts'
 
 const message = useMessage()
 const tree = ref<TreeMenuVO[]>([])
@@ -33,6 +33,35 @@ const saveMenus = async (data: SaveMenuDTO) => {
   }
 }
 
+const showEditModal = ref<boolean>(false)
+const editMenuDTO = ref<EditMenuDTO>()
+const openEditModal = (data: TreeMenuVO) => {
+  showEditModal.value = true
+  editMenuDTO.value = Object.assign({}, data.menu)
+}
+const editMenu = async (data: EditMenuDTO) => {
+  try {
+    loading.value = true
+    const res = await editMenuAPI(data)
+    if (res.code === 200) {
+      message.success('操作成功')
+      await getTreeMenu()
+      showEditModal.value = false
+    }
+  } finally {
+    loading.value = false
+  }
+}
+
+const deleteMenu = async (data: TreeMenuVO) => {
+  const res = await deleteMenuAPI(data.menu.id)
+  if (res.code === 200 && res.data) {
+    message.success('删除成功')
+    await getTreeMenu()
+  } else {
+    message.error('操作失败')
+  }
+}
 
 onMounted(() => {
   getTreeMenu()
@@ -59,7 +88,7 @@ onMounted(() => {
         default-expand-all
         size="small"
         :scroll-x="1600"
-        :columns="menuTableColumns({updateData:()=>{},deleteData:()=>{}})"
+        :columns="menuTableColumns({updateData:openEditModal,deleteData:deleteMenu})"
         :data="tree"
       />
     </n-card>
@@ -75,6 +104,17 @@ onMounted(() => {
     >
       <MenusForm :loading="loading" @submit="saveMenus" />
     </n-modal>
+    <n-modal
+      v-model:show="showEditModal"
+      class="custom-card"
+      preset="card"
+      title="添加菜单"
+      size="huge"
+      :bordered="false"
+      style="width: 660px"
+    >
+      <MenusForm :loading="loading" :editMenuDTO="editMenuDTO" @submit="editMenu" />
+    </n-modal>
   </div>
 </template>
 
@@ -83,5 +123,9 @@ onMounted(() => {
   width: 100%;
   height: var(--content-height);
   margin-right: 10px;
+
+  header {
+    margin-bottom: 24px;
+  }
 }
 </style>

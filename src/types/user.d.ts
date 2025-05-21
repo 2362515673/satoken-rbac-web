@@ -13,7 +13,7 @@ export interface UserVO {
 }
 
 export interface UserLoginVO {
-  user: UserVO
+  user: UserVO | null
   token: string
 }
 

@@ -9,8 +9,9 @@ import type { TreeMenuVO } from '@/types/menu'
  * @param updateData 修改
  * @param deleteData 添加
  */
-export const roleTableColumns = ({ updateData, deleteData }: {
+export const roleTableColumns = ({ updateData, openMenuModal, deleteData }: {
   updateData: (rowData: RoleVO) => void
+  openMenuModal: (rowData: RoleVO) => void
   deleteData: (rowData: RoleVO) => void
 }): DataTableColumns<RoleVO> => {
   return [
@@ -53,7 +54,7 @@ export const roleTableColumns = ({ updateData, deleteData }: {
     {
       title: '操作',
       key: 'actions',
-      width: 142,
+      width: 210,
       render(row) {
         return h(
           'div',
@@ -65,6 +66,14 @@ export const roleTableColumns = ({ updateData, deleteData }: {
                 onClick: () => updateData(row)
               },
               { default: () => '修改' }
+            ),
+            h(NButton,
+              {
+                type: 'info',
+                style: { marginRight: '10px' },
+                onClick: () => openMenuModal(row)
+              },
+              { default: () => '菜单' }
             ),
             h(
               NButton,

@@ -33,6 +33,15 @@ export const doRegisterAPI = (data: UserRegisterDTO) => {
 }
 
 /**
+ * 用户注销
+ */
+export const doLogoutAPI = () => {
+  return http.post({
+    url: '/user/logout'
+  })
+}
+
+/**
  * 添加用户
  * @param data 用户基本信息
  */

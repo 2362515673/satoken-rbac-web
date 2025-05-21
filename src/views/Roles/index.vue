@@ -2,12 +2,13 @@
 import { ref, defineProps, withDefaults, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useMessage, NButton } from 'naive-ui'
-import type { RoleVO, SaveRoleDTO, EditRoleDTO } from '@/types/role'
 import { getRolePageAPI, saveRoleAPI, editRoleAPI, deleteRoleAPI } from '@/apis/role.ts'
 import { handleError, handleFinish, handleStart } from '@/utils/utils.ts'
+import { roleTableColumns } from '@/utils/tableColumns.ts'
+import type { RoleVO, SaveRoleDTO, EditRoleDTO } from '@/types/role'
 import { AddOutline, Search, ReloadOutline } from '@vicons/ionicons5'
 import RolesForm from '@/views/Roles/components/RolesForm.vue'
-import { roleTableColumns } from '@/utils/tableColumns.ts'
+import RolesAssignmentsMenu from '@/views/Roles/components/RolesAssignmentsMenu.vue'
 
 const query = withDefaults(defineProps<{
     name?: string
@@ -184,7 +185,6 @@ const deleteRole = async (rowData: RoleVO) => {
 // }
 // 表自定义样式
 const rowClassName = (row: RoleVO) => {
-  console.log(row)
   if (row.status === 0) {
     return 'too-old'
   }
@@ -208,6 +208,13 @@ const handlePageChange = (currentPage: number) => {
     }
   })
   getRolePage()
+}
+
+const showMenuModal = ref(false)
+const roleId = ref<string>('')
+const openMenuModal = (rowData: RoleVO) => {
+  roleId.value = rowData.id
+  showMenuModal.value = true
 }
 
 onMounted(async () => {
@@ -261,7 +268,7 @@ onMounted(async () => {
         remote
         :loading="tableLoading"
         size="small"
-        :columns="roleTableColumns({updateData:openEditModal,deleteData:deleteRole})"
+        :columns="roleTableColumns({updateData:openEditModal,openMenuModal,deleteData:deleteRole})"
         :data="tableData"
         :pagination="pagination"
         :row-class-name="rowClassName"
@@ -290,6 +297,17 @@ onMounted(async () => {
       style="width: 500px"
     >
       <RolesForm :loading="modalLoading" :data="editRoleDto" @submit="editRole" />
+    </n-modal>
+    <n-modal
+      v-model:show="showMenuModal"
+      class="custom-card"
+      preset="card"
+      title="分配菜单"
+      size="huge"
+      :bordered="false"
+      style="width: 500px"
+    >
+      <RolesAssignmentsMenu :role-id="roleId" />
     </n-modal>
   </div>
 </template>

@@ -1,5 +1,12 @@
 import http from '@/utils/request.ts'
-import type { EditRoleDTO, QueryRoleDTO, RoleSelectVO, RoleVO, SaveRoleDTO } from '@/types/role'
+import type {
+  AddRoleMenuDTO,
+  EditRoleDTO,
+  QueryRoleDTO,
+  RoleSelectVO,
+  RoleVO,
+  SaveRoleDTO
+} from '@/types/role'
 import type { ResultPage } from '@/types/global'
 
 /**
@@ -50,6 +57,17 @@ export const deleteRoleAPI = (id: string) => {
  */
 export const getRoleListAPI = () => {
   return http.get<RoleSelectVO[]>({
-    url: '/role/list',
+    url: '/role/list'
+  })
+}
+
+/**
+ * 给角色添加菜单
+ * @param data
+ */
+export const addRoleMenuAPI = (data: AddRoleMenuDTO) => {
+  return http.post<boolean>({
+    url: '/role/add/menu',
+    data
   })
 }

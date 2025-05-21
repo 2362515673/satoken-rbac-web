@@ -7,6 +7,7 @@ import axios, {
 } from 'axios'
 import eventEmitter from '@/utils/eventEmitter.ts'
 import { createDiscreteApi } from 'naive-ui'
+import { useUserStore } from '@/stores/user.ts'
 
 // 返回值类型
 interface Result<T> {
@@ -36,6 +37,8 @@ class Http {
   private interceptors() {
     // 配置请求拦截器
     this.instance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+      const userStore = useUserStore()
+      config.headers['satoken'] = 'Bearer ' + userStore.userinfo!.token
       return config
     })
     // 配置响应拦截器
