@@ -47,12 +47,15 @@ const handleSelect = (key: string | number) => {
 
 <template>
   <div class="user-avatar">
-    <n-dropdown trigger="hover" :options="options" @select="handleSelect">
-      <n-avatar
-        size="large"
-        :src="userStore.userinfo!.user?.avatar || ''"
-      />
-    </n-dropdown>
+    <div class="login" v-if="userStore.userinfo.token !== ''">
+      <n-dropdown trigger="hover" :options="options" @select="handleSelect">
+        <n-avatar
+          size="large"
+          :src="userStore.userinfo!.user?.avatar || ''"
+        />
+      </n-dropdown>
+    </div>
+    <n-avatar v-else size="large">未登录</n-avatar>
   </div>
 </template>
 

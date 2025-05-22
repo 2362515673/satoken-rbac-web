@@ -7,6 +7,7 @@ import type { TreeMenuVO } from '@/types/menu'
 /**
  * 角色管理数据表
  * @param updateData 修改
+ * @param openMenuModal
  * @param deleteData 添加
  */
 export const roleTableColumns = ({ updateData, openMenuModal, deleteData }: {

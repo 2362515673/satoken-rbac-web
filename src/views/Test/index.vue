@@ -5,6 +5,7 @@
 <template>
   <div class="l-test">
     Test
+    <router-view></router-view>
   </div>
 </template>
 

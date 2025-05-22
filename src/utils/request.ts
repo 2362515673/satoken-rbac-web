@@ -38,7 +38,9 @@ class Http {
     // 配置请求拦截器
     this.instance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
       const userStore = useUserStore()
-      config.headers['satoken'] = 'Bearer ' + userStore.userinfo!.token
+      if (userStore.userinfo!.token) {
+        config.headers['satoken'] = 'Bearer ' + userStore.userinfo!.token
+      }
       return config
     })
     // 配置响应拦截器
